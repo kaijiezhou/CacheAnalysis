@@ -15,6 +15,7 @@ int main(){
 	printf("hello");
 	printf("ZKJSB");
 	printf("ZKJ2B");
+	printf("ZKJSB");	printf("ZKJSB");	printf("ZKJSB");	printf("ZKJSB");	printf("ZKJSB");
 	end = time(NULL);
 	clock_gettime(CLOCK_MONOTONIC,&tend);
 	printf("The time is %f\n",difftime(end,start));
