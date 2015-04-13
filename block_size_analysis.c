@@ -12,6 +12,8 @@ int main(){
 	for(i = 0;i<1024;i++){
 	    printf("%ld->%d\n",i,(*(p + i * 1024 * 25)));
 	}
+	printf("hello");
+	printf("ZKJSB");
 	end = time(NULL);
 	clock_gettime(CLOCK_MONOTONIC,&tend);
 	printf("The time is %f\n",difftime(end,start));
