@@ -6,6 +6,7 @@ int main(){
 	printf("hello");
 	printf("hello");
 	printf("ZKJSB");
+	printf("ZKJSB");
 	end = time(NULL);
 	printf("The time is %f\n",difftime(end,start));
 	return 1;
