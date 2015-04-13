@@ -15,5 +15,6 @@ end = clock();
 time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 printf("the time for array initialize is %f seconds\n",time_spent);
 return 0;
+//return 0;
 }
 
