@@ -13,9 +13,7 @@ int main(){
 	    printf("%ld->%d\n",i,(*(p + i * 1024 * 25)));
 	}
 	printf("hello");
-	printf("ZKJSB");
-	printf("ZKJ2B");
-	printf("ZKJSB");	printf("ZKJSB");	printf("ZKJSB");	printf("ZKJSB");	printf("ZKJSB");
+	printf("DWTSB");
 	end = time(NULL);
 	clock_gettime(CLOCK_MONOTONIC,&tend);
 	printf("The time is %f\n",difftime(end,start));
