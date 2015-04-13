@@ -14,6 +14,7 @@ int main(){
 	}
 	printf("hello");
 	printf("DWTSB");
+	printf("DWTBigSB");
 	end = time(NULL);
 	clock_gettime(CLOCK_MONOTONIC,&tend);
 	printf("The time is %f\n",difftime(end,start));
