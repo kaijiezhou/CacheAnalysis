@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<math.h>
 #include<time.h>
-#include<malloc.h>
+//#include<malloc.h>
 
 long readCache(int *a, long start, long end){
 	int i,tmp;
