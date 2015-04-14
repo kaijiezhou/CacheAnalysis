@@ -28,7 +28,7 @@ int main(){
         readData(data,READ_DATA_SIZE,1 << MAX_SLOT);        
         int i;                                                
         for(i = 0; i < MAX_SLOT;i++){                         
-        readData(data + ((i+1) * (1 << (MAX_SLOT << 1))) ,READ_DATA_SIZE,(1 << i));                                                             
+        readData(data + ((i+1) * (1 << MAX_SLOT) * READ_DATA_SIZE) ,READ_DATA_SIZE,(1 << i));                                                             
         }
         return 0;
 }
