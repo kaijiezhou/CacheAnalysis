@@ -1,4 +1,4 @@
-nclude <stdio.h>
+#include <stdio.h>
 #include <sys/time.h>
 
 #define WRITE_DATA_SIZE 23
