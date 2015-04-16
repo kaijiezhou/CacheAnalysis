@@ -1,3 +1,6 @@
+kernel.img : myos.elf
+	arm-none-eabi-objcopy myos.elf -O binary kernel.img
+
 myos.elf : kernel.o
 	arm-none-eabi-gcc -T linker.ld -o myos.elf -ffreestanding -O2 -nostdlib boot.o kernel.o
 

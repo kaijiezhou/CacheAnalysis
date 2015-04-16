@@ -1,6 +1,7 @@
 //#include <stdio.h>
 //#include <sys/time.h>
-#include <malloc.h>
+//#include <malloc.h>
+#include <alloca.h>
 
 #define WRITE_DATA_SIZE 23
 #define CACHE_SIZE 14
@@ -8,14 +9,14 @@
 
 int readData(int *data,int initial, int length){
     int i,temp;
-    struct timeval sc,tc;
-    gettimeofday(&sc,NULL);
+//    struct timeval sc,tc;
+//    gettimeofday(&sc,NULL);
     for(i = 0;i < length / 4; i++){
         temp = *(data + i * 4);
     }
-    gettimeofday(&tc,NULL);
-    unsigned long time = 1000000 * (tc.tv_sec - sc.tv_sec) + tc.tv_usec
-        - sc.tv_usec;
+//    gettimeofday(&tc,NULL);
+//    unsigned long time = 1000000 * (tc.tv_sec - sc.tv_sec) + tc.tv_usec
+//        - sc.tv_usec;
     //printf("%d %d %ld\n", initial, initial + length ,time);
     return 0;
 }
@@ -33,8 +34,8 @@ int calculateTime(int *data, int log_of_associativity){
     return 0;
 }
 int degreeCalculateTime(){
-    int *data = (int *)malloc(sizeof(int) * (1 << WRITE_DATA_SIZE));
-    int *data1 = (int *)malloc(sizeof(int) * (1 << WRITE_DATA_SIZE));
+    int *data = (int *)alloca(sizeof(int) * (1 << WRITE_DATA_SIZE));
+    int *data1 = (int *)alloca(sizeof(int) * (1 << WRITE_DATA_SIZE));
     int i;
     for(i = 1 ; i <= 3;i++){
         //memset(data,0,(1 << WRITE_DATA_SIZE));
@@ -46,8 +47,8 @@ int degreeCalculateTime(){
     return 0;
 }
 int main(){
-    int *data = (int *)malloc(sizeof(int) * (1 << WRITE_DATA_SIZE));
-    int *data1 = (int *)malloc(sizeof(int) * (1 << WRITE_DATA_SIZE));
+    int *data = (int *)alloca(sizeof(int) * (1 << WRITE_DATA_SIZE));
+    int *data1 = (int *)alloca(sizeof(int) * (1 << WRITE_DATA_SIZE));
     int i;
     for(i = 1 ; i <= 3;i++){
         //memset(data,0,(1 << WRITE_DATA_SIZE));
