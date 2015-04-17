@@ -3,42 +3,35 @@
 //#include <sys/time.h>
 //#include <malloc.h>
 #include <alloca.h>
+#include "predefine.c"
 //#include <nos.h>
 
-#define WRITE_DATA_SIZE 15
+#define WRITE_DATA_SIZE 17
 #define CACHE_SIZE 14
 #define BLOCK_SIZE 4
 
 int readData(int *data,int initial, int length){
+    int cc1,cc2;
     int i,temp;
-    unsigned c = 0;
-        uart_puts("rwh-up");
 
-   // for(i = 0;i < length / 4; i++){
-
-	//counter_start();
-
-	//temp = *(data + i * 4);
-	//counter_stop();
-    //uart_puts("rwh-up");
-
-    //}
-    /*char buf[32];
-    //itob(initial, buf);
-    uart_puts("rwh-up");
-    uart_puts("buf");
-    uart_puts("rwh-down");
+    for(i = 0;i < length / 4; i++){
+	cc1 = counter_start();
+	temp = *(data + i * 4);
+	cc2 = counter_stop();
+    }
+    char buf[32];
+    //uart_puts(buf);
     uart_putc(" ");
     
-    //itob(initial+length, buf);
+    itoa(initial+length, buf);
 
-    uart_puts("buf");
+    //uart_puts(buf);
     uart_putc(" ");
 
-    //itob(c, buf);
+    itoa(cc2-cc1, buf);
 
-    uart_puts("buf");
-    uart_putc("\n");*/
+    //uart_puts(buf);
+    uart_putc("\n");
     return 0;
 }
 
@@ -67,13 +60,13 @@ int degreeCalculateTime(){
     int *data1 = (int *)alloca(sizeof(int) * (1 << WRITE_DATA_SIZE));
     int i=1;
     //uart_init();
-    //for(i = 1 ; i <= 3;i++){
-    //memset(data,0,(1 << WRITE_DATA_SIZE));
-    readData(data1,0,(1<<WRITE_DATA_SIZE));
-    //printf("\n");
-    //        calculateTime(data,i);
-    //printf("\n");
-    //}
+    for(i = 1 ; i <= 3;i++){
+//    memset(data,0,(1 << WRITE_DATA_SIZE));
+    readData(data1,0,(1 << WRITE_DATA_SIZE));
+  //  printf("\n");
+            calculateTime(data,i);
+ //   printf("\n");
+    }
     return 0;
 }
 int main(){

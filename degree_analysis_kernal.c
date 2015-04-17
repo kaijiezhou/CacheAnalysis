@@ -3,41 +3,52 @@
 //#include <sys/time.h>
 //#include <malloc.h>
 #include <alloca.h>
+#include "predefine.c"
 //#include <nos.h>
 
-#define WRITE_DATA_SIZE 17
+#define WRITE_DATA_SIZE 20
 #define CACHE_SIZE 14
 #define BLOCK_SIZE 4
 
 int readData(int *data,int initial, int length){
     int cc1,cc2;
     int i,temp;
-
-    for(i = 0;i < length / 4; i++){
-	cc1 = counter_start();
-	temp = *(data + i * 4);
-	cc2 = counter_stop();
+    cc1 = counter_start();
+    for(i = 0;i < length; i++){
+	temp = *(data + i);
     }
+    cc2 = counter_stop();
     char buf[32];
-    itob(55555, null);
-/*    uart_puts(buf);
-    uart_putc(" ");
+    itoa(length, buf);
+    uart_puts(buf);
+    uart_putc('_');
+    itoa(cc1, buf);
+    uart_puts(buf);
+    uart_putc('_');
+
+    itoa(cc2, buf);
+    uart_puts(buf);
+    uart_putc('_');
+
+    itoa(initial, buf);
+    uart_puts(buf);
+    uart_putc('_');
     
     itoa(initial+length, buf);
 
     uart_puts(buf);
-    uart_putc(" ");
+    uart_putc('_');
 
     itoa(cc2-cc1, buf);
 
     uart_puts(buf);
-    uart_putc("\n");*/
+    uart_puts("\r\n");
     return 0;
 }
 
 int calculateTime(int *data, int log_of_associativity){
     long dataNumber = 1 << (CACHE_SIZE - log_of_associativity);
-    long dataSize = dataNumber>>2;
+    long dataSize = dataNumber;
     int associativity = 1 << (log_of_associativity - 1);
     int i;
     for(i = 0; i < associativity + 1;i++){
