@@ -4,18 +4,46 @@
 #define WRITE_DATA_SIZE 23
 #define CACHE_SIZE 14
 #define BLOCK_SIZE 4
+static inline unsigned ccnt_read (void)
+{
+      unsigned cc;
+        __asm__ volatile ("mrc p15, 0, %0, c15, c12, 1":"=r" (cc));
+          return cc;
+}
+
+unsigned c1, c2;
+
+void counter_start(void)
+{
+      c1 = ccnt_read();
+}
+
+void counter_stop(void)
+{
+      c2 = ccnt_read();
+}
+
+void counter_print(void)
+{
+      printf("c1 = %u\n", c1);
+        printf("c2 = %u\n", c2);
+          printf("c2 - c1 = %u\n", c2 - c1);
+}
+
 
 int readData(int *data,int initial, int length){
     int i,temp;
     struct timeval sc,tc;
-    gettimeofday(&sc,NULL);
+   // gettimeofday(&sc,NULL);
+    counter_start();
     for(i = 0;i < length / 4; i++){
         temp = *(data + i * 4);
     }
-    gettimeofday(&tc,NULL);
+    /*gettimeofday(&tc,NULL);
     unsigned long time = 1000000 * (tc.tv_sec - sc.tv_sec) + tc.tv_usec
-        - sc.tv_usec;
-    printf("%d %d %ld\n", initial, initial + length ,time);
+        - sc.tv_usec;*/
+    counter_stop(); 
+    printf("%d %d %u\n", initial, initial + length ,c2-c1);
     return 0;
 }
 
