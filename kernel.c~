@@ -138,7 +138,7 @@ void uart_puts(const char* str)
 	uart_write((const unsigned char*) str, strlen(str));
 }
 
-char* itob(int i, char b[]){
+char* itoa(int i, char b[]){
     char const digit[] = "0123456789";
     char* p = b;
     if(i<0){
@@ -168,7 +168,7 @@ int init_ccr(void)
 
 
 
-unsigned static inline ccnt_read (void)
+/*unsigned static inline ccnt_read (void)
 {
   unsigned cc;
   __asm__ volatile ("mrc p15, 0, %0, c15, c12, 1":"=r" (cc));
@@ -177,16 +177,14 @@ unsigned static inline ccnt_read (void)
 
 unsigned c1, c2;
 
-int counter_start(void)
+void counter_start(void)
 {
   c1 = ccnt_read();
-  return c1;
 }
 
-int counter_stop(void)
+void counter_stop(void)
 {
   c2 = ccnt_read();
-  return c2;
 }
 
 void counter_print(void)
@@ -195,15 +193,22 @@ void counter_print(void)
     //printf("c1 = %u\n", c1);
     //printf("c2 = %u\n", c2);
     itoa(c2-c1, buf);
-    //uart_puts("c2 - c1 = ");
+    uart_puts("c2 - c1 = ");
     uart_puts(buf);
     uart_puts("\r\n");        
     //printf("c2 - c1 = %\n", c2 - c1);
-}
+}*/
  
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
+int readData(int *data,int initial, int length);
+int calculate(){
+    int *data1 = (int *)alloca(sizeof(int) * (1 << 23));
+    readData(data1,0,(1<<23));
+    //degreeCalculateTime();
+	return 1;
+}
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
 	(void) r0;
@@ -221,7 +226,7 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     //counter_stop();
     //counter_print();
     //uart_puts("rwh");
-    degreeCalculateTime();
+    calculate();
 	while ( true ) {
 		c = uart_getc();
 		if (c == '\r') {
