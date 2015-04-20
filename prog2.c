@@ -27,6 +27,7 @@ void counter_stop(void)
 int main(int argc, char *argv[]){
 	int i;
     int j;
+    int k;
 	int *data ;
     unsigned adj;
     adj = 32 - ((unsigned)data%32);
@@ -35,15 +36,19 @@ int main(int argc, char *argv[]){
     int arrary_size = (1 <<(WRITE_DATA_SIZE-2)) * 10;
     counter_start();
     memset(data,0,(1<<(WRITE_DATA_SIZE-2)) * 10);
-    for(j = 1; j<=1000; j = j*10){
+    for(j = 1; j<=100; j = j*10){
     	while(*data < j){
-    	   for (i =arrary_size-1; i>=0;i--){
-    	   *(data+i) = *(data+i) +1;
-    	   }  
+            for(k = 0; k<=7;k++){
+                for (i =k; i<arrary_size;i=i+8){
+                    *(data+i) = *(data+i) +1;
+                }
+    	    }
     	}
-    	printf("%d\n",*data);  
+        printf("%d\n",*data);
+    	  
     }
     counter_stop();
-    printf("Total time for prog1 is %u s",c2-c1)
+    printf("Total time for prog2 is %u s\n",c2-c1)
+    free(data);
 	return 0;
 }
