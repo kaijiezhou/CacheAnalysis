@@ -24,41 +24,23 @@ void counter_stop(void)
       c2 = ccnt_read();
 }
 
-int readData(int *data,int initial, int length){
-    int i;
-    //struct timeval sc,tc;
-    //unsigned c=0;
-    for(i = 0;i < length ; i++){
-        //counter_start();
-        (*(data + i))++;
-        //counter_stop(); 
-        //c += c2-c1;
-    }
-    //printf("%d %d %u\n", initial, initial + length ,c);
-    return 0;
-}
-
 int calculateTime(int *data, int log_of_associativity){
     long dataNumber = 1 << (CACHE_SIZE - log_of_associativity);
     long dataSize = 1;
-    //long dataSize = 1<<2;
     int associativity = 1 << (log_of_associativity);
     int i,counter;
     counter_start();
-for(counter = 0; counter < TIMES;counter++){
-    for(i = 0; i < associativity;i++){                                                                                                                             
-        readData(data + 2 * i * dataNumber,2 * i * dataNumber, dataSize);
-    }
+    for(counter = 0; counter < TIMES;counter++){
+       for(i = 0; i < associativity;i++){ 
+        (*(data + 2 * i * dataNumber))++;
+       }
     }
     counter_stop();
     double c = c2 -c1;
     double times = TIMES * associativity;
     printf("%d %f\n", log_of_associativity,c / times   );
-    //readData(data,0,dataSize);
-    //readData(data,0,dataSize);
     return 0;
 }
-
 
 int main(){
     int *data1 = (int *)malloc(sizeof(int) * (1 << WRITE_DATA_SIZE));
@@ -75,10 +57,7 @@ int main(){
         memset(data_i,0,(1 << WRITE_DATA_SIZE));
         memset(data1,0,(1 << WRITE_DATA_SIZE));
 
-        //readData(data_i,0,(1<<WRITE_DATA_SIZE));
-        printf("\n");
         calculateTime(data_i,i);
-        printf("\n");
     }
     return 0;
 }
