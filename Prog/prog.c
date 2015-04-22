@@ -12,6 +12,32 @@ static inline unsigned ccnt_read (void)
           return cc;
 }
 
+static inline unsigned reset(void)
+{
+   int control=0;
+        control|=(0x5<<20);  /* evtcount0 = 0x5 = branches */
+                control|=(0x7<<12);  /* evtcount1 = 0x7  = instructions */
+
+                        /* x = 0 */
+                        /* CCR overflow interrupts = off = 0 */
+                        /* 0 */
+                        /* ECC overflow interrupts = off = 0 */
+                        /* D div/64 = 0 = off */
+                        control|=(1<<2); /* reset cycle-count register */
+                                control|=(1<<1); /* reset count registers */
+                                        control|=(1<<0); /* start counters */
+      unsigned cc;
+      __asm__ volatile ("mcr p15, 0, %0, c15, c12, 0\n" : "+r" (control));
+      return cc;
+}
+
+int init_ccr(void)
+{
+  asm volatile ("mcr p15, 0, %0, c15, c12, 0" : : "r" (1));
+  uart_puts("User-level access to CCR has been turned on.\r\n");
+  return 0;
+}
+
 unsigned c1, c2, time;
 
 void counter_start(void)
@@ -35,7 +61,7 @@ void write_prog1(int *data, int loopNumner, int size){
     for(i = 0;i<loopNumner;++i){
         reset();
         counter_start();
-        for (int j = 0; j < size; ++j)
+        for (j = 0; j < size; ++j)
         {
             (*(data + j))++;
         }
@@ -46,13 +72,13 @@ void write_prog1(int *data, int loopNumner, int size){
 }
 
 void write_prog2(int *data, int loopNumner, int size){
-    int i,j;
+    int i,j,k;
     for(i = 0;i<loopNumner;++i){
         reset();
-        for (int k = 0; k < 8; ++k)
+        for (k = 0; k < 8; ++k)
         {
             counter_start();
-            for (int j = k; j < size; j=j+8)
+            for (j = k; j < size; j=j+8)
             {
                 (*(data + j))++;
             }
