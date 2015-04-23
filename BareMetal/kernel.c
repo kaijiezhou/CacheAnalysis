@@ -218,7 +218,7 @@ void counter_print(void)
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
-void write(int *data, int loopNumner, int size){
+void write_prog1(int *data, int loopNumner, int size){
 	int i,j;
 	for(i = 0;i<loopNumner;++i){
 		reset();
@@ -233,6 +233,30 @@ void write(int *data, int loopNumner, int size){
 	return;
 }
 
+void write_prog2(int *data, int loopNumner, int size){
+	int i,j;
+	for(i = 0;i<loopNumner;++i){
+		reset();
+		for (int k = 0; k < 8; ++k)
+		{
+			counter_start();
+			for (int j = k; j < size; j=j+8)
+			{
+				(*(data + j))++;
+			}
+			counter_stop();
+		}
+	}
+	counter_print();
+	return;
+}
+
+void freshMemory(int *data, int size){
+	for (int j = 0; j < size; ++j){
+			*(data + j) = 0;;
+		}
+}
+
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
 	time = 0;
@@ -243,8 +267,12 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
     data = data +adj;
     data= (int *)alloca(sizeof(int) * (1 <<(WRITE_DATA_SIZE-2)) * 10 +64);
     int arrary_size = (1 <<(WRITE_DATA_SIZE-2)) * 10;
+    init_ccr();
     for(j = 1; j<=1000; j = j*10){
-    	write(data,j,arrary_size);
+    	freshMemory(data,arrary_size);
+    	write_prog1(data,j,arrary_size);
+    	freshMemory(data,arrary_size);
+    	write_prog2(data,j,arrary_size);
     }
 	return 0;
 }
