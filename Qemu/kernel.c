@@ -3,7 +3,8 @@
 #endif
 #include <stddef.h>
 #include <stdint.h>
-#include <alloca.h>
+#include "bm_timer.h"
+//#include <alloca.h>
 #define WRITE_DATA_SIZE 20
  
   
@@ -162,13 +163,13 @@ char* itoa(int i, char b[]){
 }
 
 
-int init_ccr(void)
-{
-  asm volatile ("mcr p15, 0, %0, c15, c12, 0" : : "r" (1));
-  uart_puts("User-level access to CCR has been turned on.\r\n");
-  return 0;
-}
-
+//int init_ccr(void)
+//{
+//  asm volatile ("mcr p15, 0, %0, c15, c12, 0" : : "r" (1));
+//  uart_puts("User-level access to CCR has been turned on.\r\n");
+//  return 0;
+//}
+/*
 static inline unsigned ccnt_read (void)
 {
   unsigned cc;
@@ -176,35 +177,35 @@ static inline unsigned ccnt_read (void)
   return cc;
 }
 
-static inline unsigned reset(void)
-{
-   int control=0;
-        control|=(0x5<<20);  /* evtcount0 = 0x5 = branches */
-                control|=(0x7<<12);  /* evtcount1 = 0x7  = instructions */
-
-                        /* x = 0 */
-                        /* CCR overflow interrupts = off = 0 */
-                        /* 0 */
-                        /* ECC overflow interrupts = off = 0 */
-                        /* D div/64 = 0 = off */
-                        control|=(1<<2); /* reset cycle-count register */
-                                control|=(1<<1); /* reset count registers */
-                                        control|=(1<<0); /* start counters */
-      unsigned cc;
-      __asm__ volatile ("mcr p15, 0, %0, c15, c12, 0\n" : "+r" (control));
-      return cc;
-}
+//static inline unsigned reset(void)
+//{
+  // int control=0;
+    //    control|=(0x5<<20);  /* evtcount0 = 0x5 = branches */
+      //          control|=(0x7<<12);  /* evtcount1 = 0x7  = instructions */
+//
+  //                      /* x = 0 */
+    //                    /* CCR overflow interrupts = off = 0 */
+      //                  /* 0 */
+        //                /* ECC overflow interrupts = off = 0 */
+          //              /* D div/64 = 0 = off */
+            //            control|=(1<<2); /* reset cycle-count register */
+              //                  control|=(1<<1); /* reset count registers */
+       //                                 control|=(1<<0); /* start counters */
+      //unsigned cc;
+      //__asm__ volatile ("mcr p15, 0, %0, c15, c12, 0\n" : "+r" (control));
+      //return cc;
+//}
 
 unsigned c1, c2, time;
 
 void counter_start(void)
 {
-  c1 = ccnt_read();
+  c1 = get_timer_tick(CLO);
 }
 
 void counter_stop(void)
 {
-  c2 = ccnt_read();
+  c2 = get_timer_tick(CLO);
   time += (c2 - c1) / 100000;
 }
 
@@ -220,10 +221,11 @@ void counter_print(void)
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
 #endif
+int data[10485760] ;
 void write_prog1(int *data, int loopNumner, int size){
 	int i,j;
 	for(i = 0;i<loopNumner;++i){
-		reset();
+		//reset();
 		counter_start();
 		for (j = 0; j < size; ++j)
 		{
@@ -238,7 +240,7 @@ void write_prog1(int *data, int loopNumner, int size){
 void write_prog2(int *data, int loopNumner, int size){
 	int i,j,k;
 	for(i = 0;i<loopNumner;++i){
-		reset();
+		//reset();
 		for (k = 0; k < 8; ++k)
 		{
 			counter_start();
@@ -253,62 +255,38 @@ void write_prog2(int *data, int loopNumner, int size){
 	return;
 }
 
-void freshMemory(int *data/*, int size*/){
-    /*int counter;
-		for (counter = 0; counter < 5; ++counter){
+void freshMemory( int size){
+int counter;
+		for (counter = 0; counter < size; ++counter){
 			*(data + counter) = 0;
-		}*/
+		}
 }
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
 	
     uart_puts("enter\r\n"); 
+    uart_puts("enter\r\n"); 
+    uart_puts("enter\r\n"); 
 	time = 0;
     int j,array_size,qq;
-	int *data ;
-    //unsigned adj;
-    //adj = 32 - ((unsigned)data%32);
-    //data = data +adj;
-    size_t a = sizeof(int) * (1 <<20) * 10;
-            char buf[32];
-    itoa(a, buf);
+    
+    char buf[32];
+    size_t array_size = sizeof(char) * (1 <<20) * 10;
+    itoa(array_size, buf);
     uart_puts(buf);
-    uart_puts("\r\n"); 
-    data= (int *)alloca(a/* +64*/);
-    array_size = (1 <<(WRITE_DATA_SIZE-2)) * 10;
-    init_ccr();
+    
+    data[10485760] = 2015;
+    itoa(data[10485759], buf);
+    uart_puts(buf);
+    uart_puts("\r\n");
 
-    for (qq = 1; qq < 5; qq++)
-    {
-        data[qq+1] = 0;
-    }
-    itoa(qq, buf);
-    uart_puts(buf);
-    uart_puts("\r\n"); 
-    data[qq] = 0;
-        itoa(qq, buf);
-    uart_puts(buf);
-    uart_puts("\r\n"); 
-                /**(data + 0) = 0;
-                *(data + 1) = 0;
-                *(data + 2) = 0;
-                *(data + 3) = 5;
-                *(data + 4) = 0;*/
-                itoa(*(data + 3), buf);
-    uart_puts(buf);
-    uart_puts("\r\n"); 
-
-    int counter;
-        //for (counter = 0; counter < 5; ++counter){
-            *(data) = 0;
-        //}
-    //for(j = 1; j<=1000; j = j*10){
-    	//freshMemory(data/*,array_size*/);
+    for(j = 1; j<=1000; j = j*10){
+    	freshMemory(array_size);
     	//write_prog1(data,j,array_size);
-    	//freshMemory(data,array_size);
+    	freshMemory(array_size);
     	//write_prog2(data,j,array_size);
-    //}
+    }
     uart_puts("exit\r\n"); 
 	return 0;
 }
